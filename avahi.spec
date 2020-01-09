@@ -12,7 +12,7 @@
 
 Name:             avahi
 Version:          0.6.31
-Release:          15%{?dist}
+Release:          15%{?dist}.1
 Summary:          Local network service discovery
 License:          LGPLv2+
 URL:              http://avahi.org
@@ -27,6 +27,7 @@ Requires(pre):    /usr/bin/getent
 Requires(pre):    /usr/sbin/groupadd
 Requires:         %{name}-libs = %{version}-%{release}
 BuildRequires:    automake
+BuildRequires:    autoconf
 BuildRequires:    libtool
 BuildRequires:    dbus-devel >= 0.90
 BuildRequires:    dbus-glib-devel >= 0.70
@@ -59,12 +60,16 @@ Requires(postun): systemd
 Requires(post):   systemd-sysv
 
 Source0:          http://avahi.org/download/%{name}-%{version}.tar.gz
-Patch0:           avahi-0.6.30-mono-libdir.patch
-Patch1:           0001-man-correct-short-option-to-print-version-string.patch
-Patch2:           0002-man-add-description-for-t-option.patch
-Patch3:           0003-dbus-don-t-crash-if-we-can-t-determine-alternative-s.patch
-Patch4:           0004-avahi-core-reserve-space-for-record-data-when-size-e.patch
-Patch5:           0005-Remove-prefix-home-lennart-tmp-avahi-from-references.patch
+Patch0000:        avahi-0.6.30-mono-libdir.patch
+Patch0001:        0001-man-correct-short-option-to-print-version-string.patch
+Patch0002:        0002-man-add-description-for-t-option.patch
+Patch0003:        0003-dbus-don-t-crash-if-we-can-t-determine-alternative-s.patch
+Patch0004:        0004-avahi-core-reserve-space-for-record-data-when-size-e.patch
+Patch0005:        0005-Remove-prefix-home-lennart-tmp-avahi-from-references.patch
+Patch0006:        0006-Silently-ignore-invalid-DNS-packets.patch
+
+# due to FTBFS caused by Gtk changes introduced in RHEL-7.2
+Patch1000:        avahi-0.6.31-no-deprecations.patch
 
 %description
 Avahi is a system which facilitates service discovery on
@@ -344,6 +349,7 @@ fashion with mDNS.
 %autosetup -S git
 
 %build
+autoreconf -fi
 %configure \
         --with-distro=fedora \
         --disable-monodoc \
@@ -649,6 +655,9 @@ fi
 %endif
 
 %changelog
+* Thu Dec 17 2015 Michal Sekletar <msekleta@redhat.com> - 0.6.31-15.1
+- silently ignore non-valid DNS response packets (#1292727)
+
 * Tue Apr 21 2015 Michal Sekletar <msekleta@redhat.com> - 0.6.31-15
 - enable hardened build (#1092506)
 - fix short option for --version, document -t option of avahi-autoipd (#948583)

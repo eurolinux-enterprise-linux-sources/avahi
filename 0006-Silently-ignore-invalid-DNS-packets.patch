@@ -1,0 +1,31 @@
+From a372e0bfb25f9f8f0d5878d317be7b614f5a4571 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Thu, 17 Dec 2015 17:12:07 +0100
+Subject: [PATCH] Silently ignore invalid DNS packets
+
+Resolves: #1290890
+---
+ avahi-core/server.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/avahi-core/server.c b/avahi-core/server.c
+index 86fd4a5..4acf5fc 100644
+--- a/avahi-core/server.c
++++ b/avahi-core/server.c
+@@ -972,11 +972,9 @@ static void dispatch_packet(AvahiServer *s, AvahiDnsPacket *p, const AvahiAddres
+             return;
+         }
+ 
+-        if (avahi_dns_packet_get_field(p, AVAHI_DNS_FIELD_QDCOUNT) != 0 ||
+-            avahi_dns_packet_get_field(p, AVAHI_DNS_FIELD_ANCOUNT) == 0 ||
+-            avahi_dns_packet_get_field(p, AVAHI_DNS_FIELD_NSCOUNT) != 0) {
++        if (avahi_dns_packet_get_field(p, AVAHI_DNS_FIELD_ANCOUNT) == 0) {
+ 
+-            avahi_log_warn("Invalid response packet from host %s.", avahi_address_snprint(t, sizeof(t), src_address));
++            avahi_log_debug("Invalid response packet from host %s.", avahi_address_snprint(t, sizeof(t), src_address));
+             return;
+         }
+ 
+-- 
+2.5.0
+
