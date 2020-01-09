@@ -1,0 +1,42 @@
+From c17ad43fc445ee649f1020378d8464b96ce57102 Mon Sep 17 00:00:00 2001
+From: Michal Sekletar <msekleta@redhat.com>
+Date: Mon, 13 Apr 2015 10:06:41 +0200
+Subject: [PATCH 3/4] dbus: don't crash if we can't determine alternative
+ {service,host} name
+
+Resolves: #1003688
+---
+ avahi-daemon/dbus-protocol.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/avahi-daemon/dbus-protocol.c b/avahi-daemon/dbus-protocol.c
+index eb8a662..d7738bd 100644
+--- a/avahi-daemon/dbus-protocol.c
++++ b/avahi-daemon/dbus-protocol.c
+@@ -391,6 +391,11 @@ static DBusHandlerResult msg_server_impl(DBusConnection *c, DBusMessage *m, AVAH
+         }
+ 
+         t = avahi_alternative_host_name(n);
++        if (!t) {
++            avahi_log_warn("Failed to determine alternative host name");
++            goto fail;
++        }
++
+         avahi_dbus_respond_string(c, m, t);
+         avahi_free(t);
+ 
+@@ -405,6 +410,11 @@ static DBusHandlerResult msg_server_impl(DBusConnection *c, DBusMessage *m, AVAH
+         }
+ 
+         t = avahi_alternative_service_name(n);
++        if (!t) {
++            avahi_log_warn("Failed to determine alternative service name");
++            goto fail;
++        }
++
+         avahi_dbus_respond_string(c, m, t);
+         avahi_free(t);
+ 
+-- 
+2.3.4
+

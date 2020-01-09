@@ -1,0 +1,40 @@
+From 7e7d6d6724742cc936177bf8dd6737b8b6f9d160 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 21 Apr 2015 13:48:45 +0200
+Subject: [PATCH 1/2] man: correct short option to print version string
+
+Related: #948583
+---
+ man/avahi-autoipd.8 | 2 +-
+ man/avahi-daemon.8  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/man/avahi-autoipd.8 b/man/avahi-autoipd.8
+index 034804c..e44c953 100644
+--- a/man/avahi-autoipd.8
++++ b/man/avahi-autoipd.8
+@@ -65,7 +65,7 @@ Don't change the process name while running. Unless this option is specified ava
+ \fB-h | --help\f1
+ Show help.
+ .TP
+-\fB-v | --version\f1
++\fB-V | --version\f1
+ Show version information.
+ .SH FILES
+ \fI/home/lennart/tmp/avahi/etc/avahi/avahi-autoipd.action\f1: the script to run when an IP address as been acquired or is lost.
+diff --git a/man/avahi-daemon.8 b/man/avahi-daemon.8
+index bbf2b43..3b35799 100644
+--- a/man/avahi-daemon.8
++++ b/man/avahi-daemon.8
+@@ -52,7 +52,7 @@ Return 0 as return code when avahi-daemon is already running.
+ \fB-h | --help\f1
+ Show help
+ .TP
+-\fB-v | --version\f1
++\fB-V | --version\f1
+ Show version information 
+ .SH FILES
+ \fI/home/lennart/tmp/avahi/etc/avahi/avahi-daemon.conf\f1: the default configuration file for avahi-daemon, \fBavahi-daemon.conf(5)\f1 for more information.
+-- 
+2.3.4
+

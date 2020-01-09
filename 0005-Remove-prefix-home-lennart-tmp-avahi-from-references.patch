@@ -1,0 +1,185 @@
+From bc5677a679ae4ade6c1d033c3bdc54dda0f15cc0 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 21 Apr 2015 14:27:34 +0200
+Subject: [PATCH 5/5] Remove prefix /home/lennart/tmp/avahi from references in
+ manpages
+
+Resolves: #1120233
+---
+ man/avahi-autoipd.8         |  4 ++--
+ man/avahi-autoipd.action.8  |  2 +-
+ man/avahi-daemon.8          | 14 +++++++-------
+ man/avahi-daemon.conf.5     |  2 +-
+ man/avahi-dnsconfd.8        |  4 ++--
+ man/avahi-dnsconfd.action.8 |  2 +-
+ man/avahi.hosts.5           |  4 ++--
+ man/avahi.service.5         |  4 ++--
+ 8 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/man/avahi-autoipd.8 b/man/avahi-autoipd.8
+index 0c2b814..aca4a21 100644
+--- a/man/avahi-autoipd.8
++++ b/man/avahi-autoipd.8
+@@ -60,7 +60,7 @@ Wait until a IP address has been successfully acquired before detaching. Only va
+ Acquire an IPv4LL address, even if a routable address has been configured on the interface.
+ .TP
+ \fB-t | --script\f1
+-Action script to run (defaults to /home/lennart/tmp/avahi/etc/avahi/avahi-autoipd.action). See \fBautoipd.action(8)\f1 for more details. 
++Action script to run (defaults to /etc/avahi/avahi-autoipd.action). See \fBautoipd.action(8)\f1 for more details.
+ .TP
+ \fB--no-proc-title\f1
+ Don't change the process name while running. Unless this option is specified avahi-autoipd will reflect its current state and the IP address in the process title.
+@@ -71,7 +71,7 @@ Show help.
+ \fB-V | --version\f1
+ Show version information.
+ .SH FILES
+-\fI/home/lennart/tmp/avahi/etc/avahi/avahi-autoipd.action\f1: the script to run when an IP address as been acquired or is lost.
++\fI/etc/avahi/avahi-autoipd.action\f1: the script to run when an IP address as been acquired or is lost.
+ .SH SIGNALS
+ \fISIGINT, SIGTERM\f1: avahi-autoipd will shutdown. (Same as \fB--kill\f1)
+ 
+diff --git a/man/avahi-autoipd.action.8 b/man/avahi-autoipd.action.8
+index 837a762..62b14a4 100644
+--- a/man/avahi-autoipd.action.8
++++ b/man/avahi-autoipd.action.8
+@@ -2,7 +2,7 @@
+ .SH NAME
+ avahi-autoipd.action \- avahi-autoipd action script
+ .SH SYNOPSIS
+-\fB/home/lennart/tmp/avahi/etc/avahi/avahi-autoipd.action
++\fB/etc/avahi/avahi-autoipd.action
+ \f1
+ .SH DESCRIPTION
+ \fIavahi-autoipd.action\f1 is the action script that is called whenever an IP address has been acquired by avahi-autoipd or when it detected an IP address conflict. The script should add or remove the specified address from the specified network interface.
+diff --git a/man/avahi-daemon.8 b/man/avahi-daemon.8
+index 3b35799..4141271 100644
+--- a/man/avahi-daemon.8
++++ b/man/avahi-daemon.8
+@@ -13,11 +13,11 @@ avahi-daemon --check\fB
+ .SH DESCRIPTION
+ The Avahi mDNS/DNS-SD daemon implements Apple's Zeroconf architecture (also known as "Rendezvous" or "Bonjour"). The daemon registers local IP addresses and static services using mDNS/DNS-SD and provides two IPC APIs for local programs to make use of the mDNS record cache the avahi-daemon maintains. First there is the so called "simple protocol" which is used exclusively by avahi-dnsconfd (a daemon which configures unicast DNS servers using server info published via mDNS) and nss-mdns (a libc NSS plugin, providing name resolution via mDNS). Finally there is the D-Bus interface which provides a rich object oriented interface to D-Bus enabled applications.
+ 
+-Upon startup avahi-daemon interprets its configuration file \fI/home/lennart/tmp/avahi/etc/avahi/avahi-daemon.conf\f1 and reads XML fragments from \fI/home/lennart/tmp/avahi/etc/avahi/services/*.service\f1 which may define static DNS-SD services. If you enable \fBpublish-resolv-conf-dns-servers\f1 in \fIavahi-daemon.conf\f1 the file \fI/etc/resolv.conf\f1 will be read, too.
++Upon startup avahi-daemon interprets its configuration file \fI/etc/avahi/avahi-daemon.conf\f1 and reads XML fragments from \fI/etc/avahi/services/*.service\f1 which may define static DNS-SD services. If you enable \fBpublish-resolv-conf-dns-servers\f1 in \fIavahi-daemon.conf\f1 the file \fI/etc/resolv.conf\f1 will be read, too.
+ .SH OPTIONS
+ .TP
+ \fB-f | --file=\f1 \fIFILE\f1
+-Specify the configuration file to read. (default: /home/lennart/tmp/avahi/etc/avahi/avahi-daemon.conf)
++Specify the configuration file to read. (default: /etc/avahi/avahi-daemon.conf)
+ .TP
+ \fB-D | --daemonize\f1
+ Daemonize after startup. Implies \fB--syslog\f1.
+@@ -44,7 +44,7 @@ Don't change the process name while running. Unless this option is specified ava
+ Kill an already running avahi-daemon. (equivalent to sending a SIGTERM)
+ .TP
+ \fB-r | --reload\f1
+-Tell an already running avahi-daemon to reread \fI/etc/resolv.conf\f1 (in case you enabled \fBpublish-resolv-conf-dns-servers\f1 in \fIavahi-daemon.conf\f1) the files from \fI/home/lennart/tmp/avahi/etc/avahi/services/\f1. Please note that this will not reload the \fI/home/lennart/tmp/avahi/etc/avahi/avahi-daemon.conf\f1. (equivalent to sending a SIGHUP)
++Tell an already running avahi-daemon to reread \fI/etc/resolv.conf\f1 (in case you enabled \fBpublish-resolv-conf-dns-servers\f1 in \fIavahi-daemon.conf\f1) the files from \fI/etc/avahi/services/\f1. Please note that this will not reload the \fI/etc/avahi/avahi-daemon.conf\f1. (equivalent to sending a SIGHUP)
+ .TP
+ \fB-c | --check\f1
+ Return 0 as return code when avahi-daemon is already running.
+@@ -55,15 +55,15 @@ Show help
+ \fB-V | --version\f1
+ Show version information 
+ .SH FILES
+-\fI/home/lennart/tmp/avahi/etc/avahi/avahi-daemon.conf\f1: the default configuration file for avahi-daemon, \fBavahi-daemon.conf(5)\f1 for more information.
++\fI/etc/avahi/avahi-daemon.conf\f1: the default configuration file for avahi-daemon, \fBavahi-daemon.conf(5)\f1 for more information.
+ 
+-\fI/home/lennart/tmp/avahi/etc/avahi/hosts\f1: additional static hostname mappings to publish in mDNS, see \fBavahi.hosts(5)\f1 for more information.
++\fI/etc/avahi/hosts\f1: additional static hostname mappings to publish in mDNS, see \fBavahi.hosts(5)\f1 for more information.
+ 
+-\fI/home/lennart/tmp/avahi/etc/avahi/services/*.service\f1: static service definitions, see \fBavahi.service(5)\f1 for more information.
++\fI/etc/avahi/services/*.service\f1: static service definitions, see \fBavahi.service(5)\f1 for more information.
+ .SH SIGNALS
+ \fISIGINT, SIGTERM\f1: avahi-daemon will shutdown. (Same as \fB--kill\f1).
+ 
+-\fISIGHUP\f1: avahi-daemon will reload unicast DNS server data from \fI/etc/resolv.conf\f1 and static service definitions from \fI/home/lennart/tmp/avahi/etc/avahi/services/\f1. (Same as \fB--reload\f1)
++\fISIGHUP\f1: avahi-daemon will reload unicast DNS server data from \fI/etc/resolv.conf\f1 and static service definitions from \fI/etc/avahi/services/\f1. (Same as \fB--reload\f1)
+ 
+ \fISIGUSR1\f1: avahi-daemon will dump local and remote cached resource record data to syslog.
+ .SH AUTHORS
+diff --git a/man/avahi-daemon.conf.5 b/man/avahi-daemon.conf.5
+index 0ebc9d4..edddc1e 100644
+--- a/man/avahi-daemon.conf.5
++++ b/man/avahi-daemon.conf.5
+@@ -2,7 +2,7 @@
+ .SH NAME
+ avahi-daemon.conf \- avahi-daemon configuration file
+ .SH SYNOPSIS
+-\fB/home/lennart/tmp/avahi/etc/avahi/avahi-daemon.conf
++\fB/etc/avahi/avahi-daemon.conf
+ \f1
+ .SH DESCRIPTION
+ \fIavahi-daemon.conf\f1 is the configuration file for avahi-daemon.
+diff --git a/man/avahi-dnsconfd.8 b/man/avahi-dnsconfd.8
+index 4ddee58..418ae36 100644
+--- a/man/avahi-dnsconfd.8
++++ b/man/avahi-dnsconfd.8
+@@ -11,7 +11,7 @@ avahi-dnsconfd --refresh\fB
+ avahi-dnsconfd --check\fB
+ \f1
+ .SH DESCRIPTION
+-avahi-dnsconfd connects to a running avahi-daemon and runs the script \fI/home/lennart/tmp/avahi/etc/avahi/dnsconfd.action\f1 for each unicast DNS server that is announced on the local LAN. This is useful for configuring unicast DNS servers in a DHCP-like fashion with mDNS.
++avahi-dnsconfd connects to a running avahi-daemon and runs the script \fI/etc/avahi/dnsconfd.action\f1 for each unicast DNS server that is announced on the local LAN. This is useful for configuring unicast DNS servers in a DHCP-like fashion with mDNS.
+ .SH OPTIONS
+ .TP
+ \fB-D | --daemonize\f1
+@@ -35,7 +35,7 @@ Show help
+ \fB-v | --version\f1
+ Show version information 
+ .SH FILES
+-\fI/home/lennart/tmp/avahi/etc/avahi/avahi-dnsconfd.action\f1: the script to run when a DNS server is found or removed.
++\fI/etc/avahi/avahi-dnsconfd.action\f1: the script to run when a DNS server is found or removed.
+ .SH SIGNALS
+ \fISIGINT, SIGTERM\f1: avahi-dnsconfd will shutdown. This is issued by passing --kill to avahi-daemon.
+ 
+diff --git a/man/avahi-dnsconfd.action.8 b/man/avahi-dnsconfd.action.8
+index 0ad2676..3f2f16a 100644
+--- a/man/avahi-dnsconfd.action.8
++++ b/man/avahi-dnsconfd.action.8
+@@ -2,7 +2,7 @@
+ .SH NAME
+ avahi-dnsconfd.action \- avahi-dnsconfd action script
+ .SH SYNOPSIS
+-\fB/home/lennart/tmp/avahi/etc/avahi/avahi-dnsconfd.action
++\fB/etc/avahi/avahi-dnsconfd.action
+ \f1
+ .SH DESCRIPTION
+ \fIavahi-dnsconfd.action\f1 is the action script that is called whenever a new unicast DNS server is found or removed by avahi-dnsconfd. The default script as shipped with avahi patches \fI/etc/resolv.conf\f1 to reflect the changed unicast DNS server configuration.
+diff --git a/man/avahi.hosts.5 b/man/avahi.hosts.5
+index fe27077..dc4f73f 100644
+--- a/man/avahi.hosts.5
++++ b/man/avahi.hosts.5
+@@ -2,10 +2,10 @@
+ .SH NAME
+ avahi.hosts \- avahi-daemon static host name file
+ .SH SYNOPSIS
+-\fB/home/lennart/tmp/avahi/etc/avahi/hosts
++\fB/etc/avahi/hosts
+ \f1
+ .SH DESCRIPTION
+-\fI/home/lennart/tmp/avahi/etc/avahi/hosts\f1 is a file which may be used to define static host name to IP address mappings for multicast DNS. This is especially useful when publishing DNS-SD services on behalf of other hosts. See \fBavahi.service(5)\f1 for more information.
++\fI/etc/avahi/hosts\f1 is a file which may be used to define static host name to IP address mappings for multicast DNS. This is especially useful when publishing DNS-SD services on behalf of other hosts. See \fBavahi.service(5)\f1 for more information.
+ 
+ The file format is similar to the one of \fI/etc/hosts\f1: on each line an IP address and the corresponding host name. The host names should be in FQDN form, i.e. with appended .local suffix.
+ .SH AUTHORS
+diff --git a/man/avahi.service.5 b/man/avahi.service.5
+index 2ef8333..1775add 100644
+--- a/man/avahi.service.5
++++ b/man/avahi.service.5
+@@ -2,10 +2,10 @@
+ .SH NAME
+ avahi.service \- avahi-daemon static service file
+ .SH SYNOPSIS
+-\fB/home/lennart/tmp/avahi/etc/avahi/services/*.service
++\fB/etc/avahi/services/*.service
+ \f1
+ .SH DESCRIPTION
+-\fI/home/lennart/tmp/avahi/etc/avahi/services/*.service\f1 are XML fragments containing static DNS-SD service data. Every service file can contain multiple service definitions which share the same name. This is useful for publishing service data for services which implement multiple protocols. (i.e. a printer implementing _ipp._tcp and _printer._tcp)
++\fI/etc/avahi/services/*.service\f1 are XML fragments containing static DNS-SD service data. Every service file can contain multiple service definitions which share the same name. This is useful for publishing service data for services which implement multiple protocols. (i.e. a printer implementing _ipp._tcp and _printer._tcp)
+ .SH XML TAGS
+ .TP
+ \fB<service-group>\f1 The document tag of avahi service files. Should contain one \fB<name>\f1 and one or more \fB<service>\f1 elements.
+-- 
+2.3.4
+

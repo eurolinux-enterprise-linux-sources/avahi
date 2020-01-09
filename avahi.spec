@@ -1,3 +1,5 @@
+%global _hardened_build 1
+
 %{?!WITH_MONO:          %global WITH_MONO 1}
 %{?!WITH_COMPAT_DNSSD:  %global WITH_COMPAT_DNSSD 1}
 %{?!WITH_COMPAT_HOWL:   %global WITH_COMPAT_HOWL  1}
@@ -10,7 +12,7 @@
 
 Name:             avahi
 Version:          0.6.31
-Release:          14%{?dist}
+Release:          15%{?dist}
 Summary:          Local network service discovery
 License:          LGPLv2+
 URL:              http://avahi.org
@@ -58,6 +60,11 @@ Requires(post):   systemd-sysv
 
 Source0:          http://avahi.org/download/%{name}-%{version}.tar.gz
 Patch0:           avahi-0.6.30-mono-libdir.patch
+Patch1:           0001-man-correct-short-option-to-print-version-string.patch
+Patch2:           0002-man-add-description-for-t-option.patch
+Patch3:           0003-dbus-don-t-crash-if-we-can-t-determine-alternative-s.patch
+Patch4:           0004-avahi-core-reserve-space-for-record-data-when-size-e.patch
+Patch5:           0005-Remove-prefix-home-lennart-tmp-avahi-from-references.patch
 
 %description
 Avahi is a system which facilitates service discovery on
@@ -334,8 +341,7 @@ local LAN. This is useful for configuring unicast DNS servers in a DHCP-like
 fashion with mDNS.
 
 %prep
-%setup -q
-%patch0 -p1 -b .mono-libdir
+%autosetup -S git
 
 %build
 %configure \
@@ -643,6 +649,13 @@ fi
 %endif
 
 %changelog
+* Tue Apr 21 2015 Michal Sekletar <msekleta@redhat.com> - 0.6.31-15
+- enable hardened build (#1092506)
+- fix short option for --version, document -t option of avahi-autoipd (#948583)
+- fix crashes in D-Bus methods GetAlternativeHostName and GetAlternativeServiceName (#1003688)
+- fix bug when avahi-daemon ended up in a tight loop (#1081801)
+- remove prefix /home/lennart/tmp/avahi from references in man pages (#1120233)
+
 * Mon Dec  8 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.31-14
 - remove dependency on the main package from avahi-libs (#1170681)
 

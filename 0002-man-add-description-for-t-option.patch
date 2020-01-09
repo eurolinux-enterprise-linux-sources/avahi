@@ -1,0 +1,27 @@
+From 0eddf3f8a2e7321ed4ab33680c0559740021eb1e Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Tue, 21 Apr 2015 13:50:41 +0200
+Subject: [PATCH 2/2] man: add description for -t option
+
+Related: #948583
+---
+ man/avahi-autoipd.8 | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/man/avahi-autoipd.8 b/man/avahi-autoipd.8
+index e44c953..0c2b814 100644
+--- a/man/avahi-autoipd.8
++++ b/man/avahi-autoipd.8
+@@ -59,6 +59,9 @@ Wait until a IP address has been successfully acquired before detaching. Only va
+ \fB--force-bind\f1
+ Acquire an IPv4LL address, even if a routable address has been configured on the interface.
+ .TP
++\fB-t | --script\f1
++Action script to run (defaults to /home/lennart/tmp/avahi/etc/avahi/avahi-autoipd.action). See \fBautoipd.action(8)\f1 for more details. 
++.TP
+ \fB--no-proc-title\f1
+ Don't change the process name while running. Unless this option is specified avahi-autoipd will reflect its current state and the IP address in the process title.
+ .TP
+-- 
+2.3.4
+
