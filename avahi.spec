@@ -10,7 +10,7 @@
 
 Name:           avahi
 Version:        0.6.25
-Release:        12%{?dist}.3
+Release:        15%{?dist}
 Summary:        Local network service discovery
 Group:          System Environment/Base
 License:        LGPLv2
@@ -628,14 +628,14 @@ fi
 %endif
 
 %changelog
-* Thu Aug 28 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-12.3
-- Document newly introduced options (#1129273)
+* Thu Aug 28 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-15
+- Document newly introduced options in manpage (#1074028)
 
-* Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-12.2
-- Make internal limits configurable (#1129273)
+* Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-14
+- Make internal limits configurable (#1074028)
 
-* Thu Jun 12 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-12.1
-- Don't consider queries with non-empty additional data sections as invalid (#1108666)
+* Thu Jun 12 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-13
+- Don't consider queries with non-empty additional data sections as invalid (#885849, #768708)
 
 * Mon Sep 24 2012 Lennart Poettering <lpoetter@redhat.com> - 0.6.25-12
 - Drop hard deps on the main Avahi package from library packages
