@@ -10,7 +10,7 @@
 
 Name:           avahi
 Version:        0.6.25
-Release:        15%{?dist}.1
+Release:        17%{?dist}
 Summary:        Local network service discovery
 Group:          System Environment/Base
 License:        LGPLv2
@@ -52,6 +52,10 @@ Patch6:         0001-core-don-t-check-ARCOUNT-to-avoid-incompatibility-wi.patch
 Patch7:         0001-daemon-make-internal-limits-configurable.patch
 Patch8:         avahi-daemon-conf.patch
 Patch9:         0001-Silently-ignore-invalid-DNS-packets.patch
+Patch10:        0001-dbus-produce-better-error-message-when-client-reques.patch
+Patch11:        0001-discover-don-t-show-python-backtrace-when-we-cannot-.patch
+Patch12:        0001-avahi-daemon-initscript-improvements.patch
+Patch13:        0001-avahi-dnsconfd-initscript-improvements.patch
 
 %description
 Avahi is a system which facilitates service discovery on
@@ -75,6 +79,7 @@ Summary: UI tools for mDNS browsing
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: %{name}-ui = %{version}-%{release}
+Requires: python-avahi = %{version}-%{release}
 Requires: vnc
 Requires: openssh-clients
 Requires: gtk2, pygtk2, pygtk2-libglade, gdbm, python, dbus-python
@@ -294,6 +299,15 @@ avahi-dnsconfd connects to a running avahi-daemon and runs the script
 local LAN. This is useful for configuring unicast DNS servers in a DHCP-like
 fashion with mDNS.
 
+%package -n python-avahi
+Summary:          Python2 Avahi bindings
+Provides:         python-avahi = %{version}-%{release}
+Requires:         %{name} = %{version}-%{release}
+Requires:         %{name}-libs%{?_isa} = %{version}-%{release}
+
+%description -n python-avahi
+%{summary}.
+
 %prep
 %setup -q
 %if %{WITH_MONO}
@@ -306,6 +320,10 @@ fashion with mDNS.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
 
 # nuke rpath, TODO: double-check if still required on new releases
 autoreconf -i
@@ -338,6 +356,9 @@ rm -f $RPM_BUILD_ROOT%{_sysconfdir}/avahi/services/sftp-ssh.service
 
 # remove desktop file for avahi-discover
 rm -f $RPM_BUILD_ROOT%{_datadir}/applications/avahi-discover.desktop
+
+# remove avahi-discover-standalone
+rm -f $RPM_BUILD_ROOT%{_bindir}/avahi-discover-standalone
 
 # create /var/run/avahi-daemon to ensure correct selinux policy for it:
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/avahi-daemon
@@ -502,7 +523,6 @@ fi
 %defattr(0644, root, root, 0755)
 %attr(0755,root,root) %{_bindir}/*
 %{_mandir}/man1/*
-%exclude %{_bindir}/avahi-discover-standalone
 %exclude %{_bindir}/b*
 %exclude %{_bindir}/avahi-discover
 %exclude %{_mandir}/man1/b*
@@ -515,8 +535,7 @@ fi
 %{_mandir}/man1/b*
 %{_mandir}/man1/avahi-discover*
 %{_datadir}/applications/b*.desktop
-# These are .py files only, so they don't go in lib64
-%{_prefix}/lib/python?.?/site-packages/*
+%{_prefix}/lib/python?.?/site-packages/avahi_discover/
 %{_datadir}/avahi/interfaces/
 
 %files devel
@@ -629,9 +648,20 @@ fi
 %{_libdir}/pkgconfig/libdns_sd.pc
 %endif
 
+%files -n python-avahi
+# These are .py files only, so they don't go in lib64
+%{_prefix}/lib/python?.?/site-packages/avahi/
+
 %changelog
-* Fri Jul 15 2016 Michal Sekletar <msekleta@redhat.com> - 0.6.25-15.1
-- silently discard invalid DNS response packets (#1357125)
+* Mon Oct 31 2016 Michal Sekletar <msekleta@redhat.com> - 0.6.25-17
+- produce better error message when client reaches maximum number of dbus objects (#1292862)
+- don't print backtrace if avahi-discover can't connect to avahi-daemon (#1110349)
+- introduce new subpackage with python bindings (#753905)
+- avahi-daemon initscript improvements (#584766)
+- avahi-dnsconfd initscript improvements (#584761)
+
+* Fri Jul 15 2016 Michal Sekletar <msekleta@redhat.com> - 0.6.25-16
+- silently discard invalid DNS response packets (#1332631)
 
 * Thu Aug 28 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-15
 - Document newly introduced options in manpage (#1074028)
