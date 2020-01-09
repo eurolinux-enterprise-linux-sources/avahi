@@ -12,7 +12,7 @@
 
 Name:             avahi
 Version:          0.6.31
-Release:          17%{?dist}
+Release:          19%{?dist}
 Summary:          Local network service discovery
 License:          LGPLv2+
 URL:              http://avahi.org
@@ -387,6 +387,9 @@ autoreconf -fi
 /usr/bin/rm -f %{buildroot}%{_sysconfdir}/avahi/services/ssh.service
 /usr/bin/rm -f %{buildroot}%{_sysconfdir}/avahi/services/sftp-ssh.service
 
+# remove avahi-discover-standalone
+rm -f $RPM_BUILD_ROOT%{_bindir}/avahi-discover-standalone
+
 # create /var/run/avahi-daemon to ensure correct selinux policy for it:
 /usr/bin/mkdir -p %{buildroot}%{_localstatedir}/run/avahi-daemon
 /usr/bin/mkdir -p %{buildroot}%{_localstatedir}/lib/avahi-autoipd
@@ -529,6 +532,7 @@ fi
 %files autoipd
 %{_sbindir}/avahi-autoipd
 %config(noreplace) %{_sysconfdir}/avahi/avahi-autoipd.action
+%attr(1770,avahi-autoipd,avahi-autoipd) %dir %{_localstatedir}/lib/avahi-autoipd/
 %{_mandir}/man8/avahi-autoipd.*
 
 %files dnsconfd
@@ -662,6 +666,13 @@ fi
 %endif
 
 %changelog
+* Thu Nov 09 2017 Michal Sekletar <msekleta@redhat.com> - 0.6.31-19
+- exclude avahi-discover from avahi-tools package (#1421229)
+
+* Tue Nov 07 2017 Michal Sekletar <msekleta@redhat.com> - 0.6.31-18
+- create home directory for avahi-autoipd user (#1416287)
+- get rid of the dangling symlink to avahi-discover in debuginfo package (#1421229)
+
 * Mon Jul 04 2016 Michal Sekletar <msekleta@redhat.com> - 0.6.31-17
 - fix crash due to use of deprecated Gtk3 API (#1263720)
 - don't add 0pointer.de and zeroconf.org to default browse list (#1340837)
