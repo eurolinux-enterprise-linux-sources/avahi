@@ -10,7 +10,7 @@
 
 Name:           avahi
 Version:        0.6.25
-Release:        12%{?dist}.1
+Release:        12%{?dist}.3
 Summary:        Local network service discovery
 Group:          System Environment/Base
 License:        LGPLv2
@@ -49,6 +49,8 @@ Patch3:         CVE-2010-2244.patch
 Patch4:         0.6.26-initscript.patch
 Patch5:         0001-socket-Still-read-corrupt-packets-from-the-sockets.patch
 Patch6:         0001-core-don-t-check-ARCOUNT-to-avoid-incompatibility-wi.patch
+Patch7:         0001-daemon-make-internal-limits-configurable.patch
+Patch8:         avahi-daemon-conf.patch
 
 %description
 Avahi is a system which facilitates service discovery on
@@ -300,6 +302,8 @@ fashion with mDNS.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 # nuke rpath, TODO: double-check if still required on new releases
 autoreconf -i
@@ -624,6 +628,12 @@ fi
 %endif
 
 %changelog
+* Thu Aug 28 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-12.3
+- Document newly introduced options (#1129273)
+
+* Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-12.2
+- Make internal limits configurable (#1129273)
+
 * Thu Jun 12 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-12.1
 - Don't consider queries with non-empty additional data sections as invalid (#1108666)
 
