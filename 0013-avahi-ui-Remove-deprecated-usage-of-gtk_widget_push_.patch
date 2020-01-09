@@ -1,0 +1,41 @@
+From 305e5c6faab36e01f2ac7a26a9b1690a60e54275 Mon Sep 17 00:00:00 2001
+From: Trent Lloyd <trent@lloyd.id.au>
+Date: Thu, 16 Jan 2014 13:16:22 +0800
+Subject: [PATCH] avahi-ui: Remove deprecated usage of
+ gtk_widget_push_composite_child/gtk_widget_pop_composite_child
+
+The composite API is deprecated in GTK3, it doesn't really do anything other than
+hide the container objects from gtk_container_foreach which no one is really doing
+with avahi-ui that I can find anyway, so we remove it entirely rather than make it
+conditional.
+
+Ideally avahi-ui should be converted to GtkBuilder where there is a new composite API
+---
+ avahi-ui/avahi-ui.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/avahi-ui/avahi-ui.c b/avahi-ui/avahi-ui.c
+index 8f90b27..e3d38f5 100644
+--- a/avahi-ui/avahi-ui.c
++++ b/avahi-ui/avahi-ui.c
+@@ -1121,8 +1121,6 @@ static void aui_service_dialog_init(AuiServiceDialog *d) {
+     p->service_list_store = p->domain_list_store = NULL;
+     p->service_type_names = NULL;
+ 
+-    gtk_widget_push_composite_child();
+-
+     gtk_container_set_border_width(GTK_CONTAINER(d), 5);
+ 
+ #if GTK_CHECK_VERSION(3,0,0)
+@@ -1198,8 +1196,6 @@ static void aui_service_dialog_init(AuiServiceDialog *d) {
+ 
+     gtk_widget_show_all(vbox);
+ 
+-    gtk_widget_pop_composite_child();
+-
+     p->glib_poll = avahi_glib_poll_new(NULL, G_PRIORITY_DEFAULT);
+ 
+     p->service_pulse_timeout = g_timeout_add(100, service_pulse_callback, d);
+-- 
+2.7.4
+

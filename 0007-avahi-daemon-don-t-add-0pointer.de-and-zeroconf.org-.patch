@@ -1,0 +1,29 @@
+From 80bed702662a1cbad0f6b54345ab5b21734dc861 Mon Sep 17 00:00:00 2001
+From: Lennart Poettering <lennart@poettering.net>
+Date: Mon, 2 Apr 2012 21:17:19 +0200
+Subject: [PATCH] avahi-daemon: don't add 0pointer.de and zeroconf.org to
+ default browselist
+
+(cherry-picked from commit 938b5f883fbaa642e3acb7720e37f95f3d72be62)
+
+Resolves: #1340837
+---
+ avahi-daemon/avahi-daemon.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/avahi-daemon/avahi-daemon.conf b/avahi-daemon/avahi-daemon.conf
+index c992842..1906590 100644
+--- a/avahi-daemon/avahi-daemon.conf
++++ b/avahi-daemon/avahi-daemon.conf
+@@ -21,7 +21,7 @@
+ [server]
+ #host-name=foo
+ #domain-name=local
+-browse-domains=0pointer.de, zeroconf.org
++#browse-domains=0pointer.de, zeroconf.org
+ use-ipv4=yes
+ use-ipv6=no
+ #allow-interfaces=eth0
+-- 
+2.7.4
+

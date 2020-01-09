@@ -12,7 +12,7 @@
 
 Name:             avahi
 Version:          0.6.31
-Release:          15%{?dist}.1
+Release:          17%{?dist}
 Summary:          Local network service discovery
 License:          LGPLv2+
 URL:              http://avahi.org
@@ -67,6 +67,13 @@ Patch0003:        0003-dbus-don-t-crash-if-we-can-t-determine-alternative-s.patc
 Patch0004:        0004-avahi-core-reserve-space-for-record-data-when-size-e.patch
 Patch0005:        0005-Remove-prefix-home-lennart-tmp-avahi-from-references.patch
 Patch0006:        0006-Silently-ignore-invalid-DNS-packets.patch
+Patch0007:        0007-avahi-daemon-don-t-add-0pointer.de-and-zeroconf.org-.patch
+Patch0008:        0008-avahi_server_set_browse_domains-check-the-provided-d.patch
+Patch0009:        0009-Fix-not-publishing-entries-if-a-probing-interface-is.patch
+Patch0010:        0010-avahi-ui-Replace-usage-of-deprecated-GTK-Stock-Items.patch
+Patch0011:        0011-avahi-ui-replace-gtk_vbox_new-with-gtk_box_new-for-G.patch
+Patch0012:        0012-avahi-ui-Cannot-use-g_object_unref-to-free-GdkCursor.patch
+Patch0013:        0013-avahi-ui-Remove-deprecated-usage-of-gtk_widget_push_.patch
 
 # due to FTBFS caused by Gtk changes introduced in RHEL-7.2
 Patch1000:        avahi-0.6.31-no-deprecations.patch
@@ -655,8 +662,13 @@ fi
 %endif
 
 %changelog
-* Thu Dec 17 2015 Michal Sekletar <msekleta@redhat.com> - 0.6.31-15.1
-- silently ignore non-valid DNS response packets (#1292727)
+* Mon Jul 04 2016 Michal Sekletar <msekleta@redhat.com> - 0.6.31-17
+- fix crash due to use of deprecated Gtk3 API (#1263720)
+- don't add 0pointer.de and zeroconf.org to default browse list (#1340837)
+- fix not publishing entries if a probing interface is removed (#1222646)
+
+* Thu Dec 17 2015 Michal Sekletar <msekleta@redhat.com> - 0.6.31-16
+- silently ignore non-valid DNS response packets (#1290890)
 
 * Tue Apr 21 2015 Michal Sekletar <msekleta@redhat.com> - 0.6.31-15
 - enable hardened build (#1092506)

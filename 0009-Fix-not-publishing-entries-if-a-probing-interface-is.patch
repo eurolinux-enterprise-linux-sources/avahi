@@ -1,0 +1,44 @@
+From 8d7edcaf79ce5a439f40ca50c020a097cbe8d8eb Mon Sep 17 00:00:00 2001
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Wed, 25 Nov 2015 16:31:39 +0100
+Subject: [PATCH] Fix not publishing entries if a probing interface is removed.
+
+If an interface is no longer relevant for mDNS while an announcer was
+probing on this interface, the announcer is removed but the n_probing
+counter of the entry group is not updated.   So n_probing would never
+reach zero and the entry group would stay  forever in the REGISTERING
+state.  If the entry group is for a host resource record,  the daemon
+could stay in the registering phase forever and would not publish any
+service.
+
+Fix that by decrementing group->n_probing when removing an announcer
+in the PROBING state. Also handle the case where the entry group was
+waiting for the deleted announcer to become registered.
+
+(cherry-picked from PR https://github.com/lathiat/avahi/pull/39)
+
+Resolves: #1222646
+---
+ avahi-core/announce.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/avahi-core/announce.c b/avahi-core/announce.c
+index ccdbf15..05053cf 100644
+--- a/avahi-core/announce.c
++++ b/avahi-core/announce.c
+@@ -44,6 +44,12 @@ static void remove_announcer(AvahiServer *s, AvahiAnnouncer *a) {
+     AVAHI_LLIST_REMOVE(AvahiAnnouncer, by_interface, a->interface->announcers, a);
+     AVAHI_LLIST_REMOVE(AvahiAnnouncer, by_entry, a->entry->announcers, a);
+ 
++    if (a->state == AVAHI_PROBING && a->entry->group) {
++	assert(a->entry->group->n_probing);
++	a->entry->group->n_probing--;
++	avahi_s_entry_group_check_probed(a->entry->group, 1);
++    }
++
+     avahi_free(a);
+ }
+ 
+-- 
+2.7.4
+
