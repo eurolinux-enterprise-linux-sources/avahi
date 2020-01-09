@@ -10,7 +10,7 @@
 
 Name:           avahi
 Version:        0.6.25
-Release:        15%{?dist}
+Release:        15%{?dist}.1
 Summary:        Local network service discovery
 Group:          System Environment/Base
 License:        LGPLv2
@@ -51,6 +51,7 @@ Patch5:         0001-socket-Still-read-corrupt-packets-from-the-sockets.patch
 Patch6:         0001-core-don-t-check-ARCOUNT-to-avoid-incompatibility-wi.patch
 Patch7:         0001-daemon-make-internal-limits-configurable.patch
 Patch8:         avahi-daemon-conf.patch
+Patch9:         0001-Silently-ignore-invalid-DNS-packets.patch
 
 %description
 Avahi is a system which facilitates service discovery on
@@ -304,6 +305,7 @@ fashion with mDNS.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 # nuke rpath, TODO: double-check if still required on new releases
 autoreconf -i
@@ -628,6 +630,9 @@ fi
 %endif
 
 %changelog
+* Fri Jul 15 2016 Michal Sekletar <msekleta@redhat.com> - 0.6.25-15.1
+- silently discard invalid DNS response packets (#1357125)
+
 * Thu Aug 28 2014 Michal Sekletar <msekleta@redhat.com> - 0.6.25-15
 - Document newly introduced options in manpage (#1074028)
 
